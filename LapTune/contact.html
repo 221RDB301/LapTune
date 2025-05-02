@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sazinies ar mums - LapTune</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            background-color: #6e7a75;
+            background-image: url("assets/images/LapTune.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 850px;
+            background-attachment: fixed;
+        }
+        </style>
+        
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html" class="contact-link">⬅ Atpakaļ uz sākumlapu</a>
+    </div>
+
+    <div class="main-container">
+        <h1 class="main-title">Sazinies ar mums</h1>
+
+        <div class="form-container">
+            <!-- Contact Form, noņemot checkbox un info par anonīmu izsūtīšanu -->
+            <form id="contactForm">
+                <!-- Brīvais teksts -->
+                <label for="message">Brīvais teksts līdz 500 rakstzīmēm:</label>
+                <textarea id="message" name="message" placeholder="Ievadi ziņu līdz 500 rakstzīmēm"></textarea>
+                <div id="messageError" class="error-message"></div> <!-- Error message for message -->
+
+                <!-- Epasta lauks -->
+                <label for="email">E-pasts:</label>
+                <input type="text" id="email" name="email" placeholder="Ievadi savu e-pastu">
+                <div id="emailError" class="error-message"></div> <!-- Error message for email -->
+
+                <!-- Submit poga -->
+                <button type="submit" class="submit-button">Sūtīt ziņu</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+        
+            const message = document.getElementById("message").value.trim();
+            const email = document.getElementById("email").value.trim();
+        
+            let isValid = true;
+        
+            // Pamata validācija (atkārtoti drošībai)
+            if (!message || message.length > 500) {
+                document.getElementById("messageError").innerText = "Ziņai jābūt ne tukšai un līdz 500 rakstzīmēm.";
+                isValid = false;
+            } else {
+                document.getElementById("messageError").innerText = "";
+            }
+        
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|lv)$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById("emailError").innerText = "Lūdzu, ievadiet derīgu e-pastu.";
+                isValid = false;
+            } else {
+                document.getElementById("emailError").innerText = "";
+            }
+        
+            if (!isValid) return;
+        
+            // Saglabāšana localStorage
+            const name = email.split('@')[0]; // Izgūst vārdu no e-pasta
+            const stored = JSON.parse(localStorage.getItem("contactMessages") || "[]");
+        
+            stored.push({
+                name,
+                email,
+                message,
+                date: new Date().toLocaleString()
+            });
+        
+            localStorage.setItem("contactMessages", JSON.stringify(stored));
+        
+            alert("Paldies! Jūsu ziņa ir nosūtīta.");
+            this.reset();
+        });
+        </script>
+        
+</body>
+</html>

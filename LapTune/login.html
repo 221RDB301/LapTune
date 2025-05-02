@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ienākt - LapTune</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            background-color: #6e7a75;
+            background-image: url("assets/images/LapTune.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 850px;
+            background-attachment: fixed;
+        }
+        </style>
+</head>
+<body>
+    
+    <div class="navbar">
+        <a href="index.html" class="contact-link">⬅ Atpakaļ uz sākumlapu</a>
+    </div>
+
+    <div class="main-container">
+        <h1 class="main-title">Ienākt</h1>
+
+        <div class="form-container">
+            <form id="loginForm">
+                <label for="email">E-pasts:</label>
+                <input type="text" id="loginEmail" name="email" placeholder="Ievadi e-pastu">
+                <div id="loginEmailError" class="error-message"></div> <!-- Error message for email -->
+
+                <label for="password">Parole:</label>
+                <input type="password" id="loginPassword" name="password" placeholder="Ievadi paroli">
+                <div id="loginPasswordError" class="error-message"></div> <!-- Error message for password -->
+
+                <button type="submit" class="submit-button">Pieslēgties</button>
+            </form>
+
+            <p class="link-text">Nav konta? <a href="register.html">Reģistrēties šeit</a></p> <!-- Hyperlink for register -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

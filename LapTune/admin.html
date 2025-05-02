@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <title>LapTune — Administratora panelis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <style>
+        body {
+            background-color: #6e7a75;
+            background-image: url("assets/images/LapTune.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 850px;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .navbar a {
+            background-color: #1b4f52;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #ffffff;
+            margin-top: 40px;
+        }
+
+        .table-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap; 
+        }
+
+        table {
+            width: auto;
+            min-width: 600px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1b4f52;
+            color: white;
+        }
+
+        td {
+            background-color: white;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigācija -->
+    <div class="navbar">
+        <a href="index.html">⬅ Atpakaļ uz sākumlapu</a>
+    </div>
+
+    
+ <!-- Ziņojumu sadaļa -->
+<div style="width: 100%; display: block; text-align: center; margin-top: 30px;">
+    <h2 style="color: #ffffff;">Administratora sadaļa — Sazinies ar mums ziņojumi</h2>
+    <div style="margin-top: 20px; display: flex; justify-content: center;">
+      <table>
+        <thead>
+          <tr>
+            <th>Vārds</th>
+            <th>E-pasts</th>
+            <th>Ziņojums</th>
+            <th>Datums</th>
+          </tr>
+        </thead>
+        <tbody id="messageTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Reģistrētie lietotāji -->
+  <div style="width: 100%; display: block; text-align: center; margin-top: 60px;">
+    <h2 style="color: #ffffff;">Reģistrētie lietotāji</h2>
+    <div style="margin-top: 20px; display: flex; justify-content: center;">
+      <table>
+        <thead>
+          <tr>
+            <th>E-pasts</th>
+            <th>Reģistrācijas datums</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+  
+
+
+    <!-- JS funkcionalitāte -->
+    <script>
+        // Pārbaude, vai lietotājs ir admin
+        const user = JSON.parse(localStorage.getItem("loggedInUser"));
+        if (!user || user.email !== "admin@laptune.lv") {
+            alert("Pieeja liegta — tikai administratoriem!");
+            window.location.href = "login.html";
+        }
+
+        // Ziņojumu attēlošana
+        const messages = JSON.parse(localStorage.getItem("contactMessages") || "[]");
+        const tbody = document.getElementById("messageTableBody");
+
+        if (messages.length === 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td colspan="4" class="no-messages">Nav pieejamu ziņojumu</td>`;
+            tbody.appendChild(row);
+        } else {
+            messages.forEach(msg => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${msg.name}</td>
+                    <td>${msg.email}</td>
+                    <td>${msg.message}</td>
+                    <td>${msg.date}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Reģistrēto lietotāju attēlošana
+        const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+        const userTbody = document.getElementById("userTableBody");
+
+        if (users.length === 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td colspan="2" class="no-messages">Nav reģistrētu lietotāju</td>`;
+            userTbody.appendChild(row);
+        } else {
+            users.forEach(user => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${user.email}</td>
+                    <td>${user.registrationDate || "Nav pieejams"}</td>
+                `;
+                userTbody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saderīgās Detaļas</title>
+    <link rel="stylesheet" href="assets/css/styles.css"> <!-- CSS fails -->
+
+    <style>
+        body {
+            background-color: #6e7a75;
+            background-image: url("assets/images/LapTune.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 850px;
+            background-attachment: fixed;
+        }
+        </style>
+</head>
+<body>
+    
+    <div class="navbar">
+        <a href="index.html" class="contact-link">⬅ Atpakaļ uz sākumlapu</a>
+        <a href="contact.html" class="contact-link">Sazinies ar mums</a>
+    </div>
+
+    <!-- Galvenais saturs -->
+    <div class="main-container">
+        <h1 class="main-title">LapTune</h1>
+
+        <!-- Atlasītā datora informācija -->
+        <div class="laptop-info">
+            <h2>Atlasītā Datora Informācija</h2>
+            <div id="laptopDetails">
+                <!-- Šeit tiks ievietota informācija par datoru -->
+            </div>
+            <!-- Poga, kas aizved uz nākamo lapu -->
+            <a href="LaptopCompParts.html" class="button">Saderīgās Detaļas</a>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Funkcija, lai nolasītu datus no CSV faila
+        window.onload = function() {
+            // Iegūstam datus no localStorage, kas satur atlasīto datoru
+            const selectedLaptop = JSON.parse(localStorage.getItem("laptopResults"));
+
+            if (selectedLaptop && selectedLaptop.length > 0) {
+                const laptop = selectedLaptop[0];  // Piemēram, izvēlamies pirmo datoru no rezultātiem
+                fetchLaptopData(laptop);
+            } else {
+                alert("Nav atrasti dati par datoru.");
+            }
+        };
+
+        // Funkcija, kas iegūst un parāda datus par datoru no CSV faila
+        function fetchLaptopData(laptop) {
+            fetch('data/laptops.csv') // CSV fails
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP kļūda! Statuss: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    parseCSV(data, laptop);
+                })
+                .catch(error => {
+                    console.error("Nepareiza CSV faila nolasīšana:", error);
+                    alert("Neizdevās ielādēt CSV failu. Pārbaudiet faila ceļu vai tīkla savienojumu.");
+                });
+        }
+
+        // Funkcija, kas analizē CSV datus un meklē atbilstošo datoru
+        function parseCSV(data, laptop) {
+            const lines = data.split("\n").filter(line => line.trim() !== ""); // Filtrē tukšās rindas
+            const headers = lines[0].split(","); // Galvenes no pirmās rindas
+
+            // Meklējam datoru ar atbilstošu sērijas numuru, modeli vai produkta numuru
+            const foundLaptop = lines.slice(1).map(line => {
+                const values = line.split(",");
+                const laptopData = {};
+                headers.forEach((header, index) => {
+                    laptopData[header.trim()] = values[index]?.trim(); // Trim vērtības un galvenes
+                });
+                return laptopData;
+            }).find(item => 
+                (laptop.serialNumber && item.serialNumber?.toLowerCase() === laptop.serialNumber?.toLowerCase()) ||
+                (laptop.model && item.model?.toLowerCase() === laptop.model?.toLowerCase()) ||
+                (laptop.productNumber && item.productNumber?.toLowerCase() === laptop.productNumber?.toLowerCase())
+            );
+
+            if (foundLaptop) {
+                displayLaptopDetails(foundLaptop);
+            } else {
+                alert("Dators netika atrasts datu failā.");
+            }
+        }
+
+        // Funkcija, kas attēlo datora informāciju lapā
+        function displayLaptopDetails(laptop) {
+            const laptopDetailsDiv = document.getElementById("laptopDetails");
+            laptopDetailsDiv.innerHTML = `
+                <p><strong>Ražotājs:</strong> ${laptop.Company}</p>
+                <p><strong>Modelis:</strong> ${laptop.model}</p>
+                <p><strong>Sērijas numurs:</strong> ${laptop.serialNumber}</p>
+                <p><strong>Produkta numurs:</strong> ${laptop.productNumber}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

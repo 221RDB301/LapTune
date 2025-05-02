@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LapTune</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- PapaParse bibliotēka CSV faila apstrādei -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<style>
+body {
+    background: linear-gradient(135deg, #e0f2f1, #f6fdfc);
+}
+</style>
+</head>
+<body>
+    
+    <!-- Navigācija -->
+    <div class="navbar">
+        <a href="contact.html" class="contact-link">Sazinies ar mums</a>
+        <div class="auth-buttons">
+            <a href="register.html" class="button">Reģistrēties</a>
+            <a href="login.html" class="button">Ienākt</a>
+            
+        </div>
+        
+</div>
+
+    <!-- Galvenais saturs -->
+    <div class="main-container">
+        
+        
+        <!-- Meklēšanas forma -->
+        <div id="admin-link-container" style="text-align: center; margin-top: 20px;"></div>
+        <div style="display: flex; justify-content: center; align-items: flex-start; gap: 0px; margin-top: 45px; flex-wrap: wrap;">
+            <!-- Meklēšanas forma -->
+            <div class="search-form">
+                <form id="searchForm">
+                    <input type="text" placeholder="Datora sērijas numurs" id="serialNumber" name="serialNumber">
+                    <input type="text" placeholder="Datora modelis" id="model" name="model">
+                    <input type="text" placeholder="Datora produkta numurs" id="productNumber" name="productNumber">
+                    <div class="buttons">
+                        <button type="submit" class="search-button">Meklēt</button>
+                        <button type="button" class="clear-button">Nodzēst</button>
+                    </div>
+                    <p class="note-text">Ievadiet vismaz vienu no prasītajiem kritērijiem</p>
+                </form>
+            </div>
+        
+            <!-- Logotips pa labi -->
+            <div style="text-align:center;">
+                <img src="assets/images/LapTune.png" alt="LapTune Logo" style="max-width: 400px;">
+            </div>
+        </div>
+        
+    </div>
+    <!-- JavaScript -->
+    <script>
+        let laptopData = []; // Glabā CSV datus
+
+        // Automātiski ielādē CSV failu ar PapaParse, kad lapa ielādējas
+        window.onload = function() {
+            Papa.parse("data/laptops.csv", {
+                download: true, // Ielādē CSV failu no servera
+                header: true,   // Izmanto pirmo rindu kā galvenes
+                skipEmptyLines: true, // Ignorē tukšās rindas
+                complete: function(results) {
+                    laptopData = results.data; // Saglabā CSV datus
+                    console.log("CSV dati ielādēti:", laptopData); // Pārbaude
+                },
+                error: function(error) {
+                    console.error("Kļūda CSV faila parsēšanā:", error);
+                    alert("Neizdevās ielādēt CSV failu. Pārbaudiet savienojumu vai faila formātu.");
+                }
+            });
+        };
+
+        // Meklēšanas pogas klikšķa notikums
+        document.querySelector(".search-button").addEventListener("click", (event) => {
+            event.preventDefault(); // Novērš formas nosūtīšanu
+
+            const serialNumber = document.getElementById("serialNumber").value.trim();
+            const model = document.getElementById("model").value.trim();
+            const productNumber = document.getElementById("productNumber").value.trim();
+
+            const query = serialNumber || model || productNumber;
+            if (!query) {
+                alert("Lūdzu, ievadiet vismaz vienu meklēšanas kritēriju!");
+                return;
+            }
+
+            // Filtrējam datus pēc meklēšanas kritērijiem
+            const results = laptopData.filter(item => {
+                return (serialNumber ? item.serialNumber?.toLowerCase().includes(serialNumber.toLowerCase()) : true) &&
+                       (model ? item.model?.toLowerCase().includes(model.toLowerCase()) : true) &&
+                       (productNumber ? item.productNumber?.toLowerCase().includes(productNumber.toLowerCase()) : true);
+            });
+
+            if (results.length > 0) {
+                // Saglabājam rezultātus un novirzām uz laptopDetails.html
+                localStorage.setItem("laptopResults", JSON.stringify(results));
+                window.location.href = "laptopDetails.html";
+            } else {
+                alert("Nav atrasti rezultāti");
+            }
+        });
+
+        // Nodzēst pogas klikšķa notikums
+        document.querySelector(".clear-button").addEventListener("click", () => {
+            console.log("Forma tika nodzēsta");
+            document.getElementById("searchForm").reset(); // Iztīra ievadus
+        });
+    </script>
+    <script>
+        const user = JSON.parse(localStorage.getItem("loggedInUser"));
+        if (user && user.email === "admin@laptune.lv") {
+          const container = document.getElementById("admin-link-container");
+          const adminLink = document.createElement("a");
+          adminLink.href = "admin.html";
+          adminLink.className = "button";
+          adminLink.textContent = "Administratora sadaļa";
+          container.appendChild(adminLink);
+        }
+      </script>
+</body>
+</html>

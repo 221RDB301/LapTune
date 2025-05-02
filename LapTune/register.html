@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reģistrēties - LapTune</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            background-color: #6e7a75;
+            background-image: url("assets/images/LapTune.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 850px;
+            background-attachment: fixed;
+        }
+        </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html" class="contact-link">⬅ Atpakaļ uz sākumlapu</a>
+    </div>
+
+    <div class="main-container">
+        <h1 class="main-title">Reģistrēties</h1>
+
+        <div class="form-container">
+            <form id="registerForm">
+                <label for="email">E-pasts:</label>
+                <input type="text" id="email" name="email" placeholder="Ievadi savu e-pastu">
+                <div id="emailError" class="error-message"></div> <!-- Error message for email -->
+
+                <label for="password">Parole:</label>
+                <input type="password" id="password" name="password" placeholder="Ievadi paroli">
+                <div id="passwordError" class="error-message"></div> <!-- Error message for password -->
+
+                <label for="confirmPassword">Apstiprināt paroli:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Apstipriniet paroli">
+                <div id="confirmPasswordError" class="error-message"></div> <!-- Error message for confirm password -->
+
+                <button type="submit" class="submit-button">Reģistrēties</button>
+            </form>
+
+            <p class="link-text">Ja eksistē lietotājs, <a href="login.html">pieslēgties šeit</a></p> <!-- Hyperlink for login -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

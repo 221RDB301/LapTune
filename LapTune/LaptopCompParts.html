@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saderīgās Detaļas</title>
+    <style>
+body {
+    background-color: #e0f7f1;
+}
+        body {
+                background-color: #6e7a75;
+                background-image: url("assets/images/LapTune.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 850px;
+                background-attachment: fixed;
+            
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            
+            color: #333;
+            position: relative;
+        }
+
+        /* Tumšais pārklājums */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Tumšāks pārklājums (50% caurspīdīgs melns) */
+            z-index: -1;
+        }
+
+        .header {
+            position: relative; /* Lai pozicionētu absolūto virsrakstu */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        .header h1 {
+            position: absolute; /* Virsraksts pozicionēts neatkarīgi no pogām */
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 36px;
+            margin: 0;
+            z-index: 1;
+        }
+
+        .navbar {
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .navbar a {
+            font-size: 16px;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #1b4f52;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #123436;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .filter-container {
+            width: 250px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .compatible-parts {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #444; /* Tumšākas malas tabulai */
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h3 {
+            margin-top: 0;
+        }
+
+        #partsTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        #partsTable th, #partsTable td {
+            border: 1px solid #444; /* Tumšākas malas tabulai */
+            padding: 8px;
+        }
+
+        #partsTable th {
+            background-color: #f2f2f2; /* Gaiši pelēka galvene */
+            font-weight: bold;
+        }
+
+        #partsTable tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align:center; margin-top: 20px;">
+    
+</div>
+    <div class="header">
+        <div class="navbar">
+            <a href="index.html">⬅ Atpakaļ uz sākumlapu</a>
+            <a href="contact.html">Sazinies ar mums</a>
+        </div>
+        <h1>LapTune</h1>
+    </div>
+
+    <div class="main-container">
+        <div class="filter-container">
+            <h3>Filtri</h3>
+            <label for="componentType">Atlasīt komponentes</label>
+            <select id="componentType">
+                <option value="cpu">CPU</option>
+                <option value="memory">RAM</option>
+                <option value="internal-hard-drive">SSD</option>
+                <option value="motherboard">Mātesplate</option>
+            </select>
+            <button id="filterButton">Atlasīt</button>
+        </div>
+
+        <div class="compatible-parts">
+            <h2>Atlasītās detaļas</h2>
+            <table id="partsTable">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        document.getElementById("filterButton").addEventListener("click", function () {
+            const selectedComponent = document.getElementById("componentType").value;
+            const csvFiles = {
+                "cpu": { file: "data/cpu.csv", type: "Procesors" },
+                "memory": { file: "data/memory.csv", type: "RAM" },
+                "internal-hard-drive": { file: "data/internal-hard-drive.csv", type: "SSD" },
+                "motherboard": { file: "data/motherboard.csv", type: "Mātesplate" }
+            };
+
+            if (!csvFiles[selectedComponent]) {
+                alert("Atlasiet derīgu komponentes tipu!");
+                return;
+            }
+
+            const selectedCsv = csvFiles[selectedComponent];
+            const tableBody = document.querySelector("#partsTable tbody");
+            tableBody.innerHTML = ""; // Notīrām tabulu
+
+            Papa.parse(selectedCsv.file, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function (results) {
+                    const partsData = results.data;
+
+                    if (partsData.length === 0) {
+                        alert("Nav datu attiecīgajā CSV failā.");
+                        return;
+                    }
+
+                    const headers = Object.keys(partsData[0]).filter(header => header.trim().toLowerCase() !== "price per gb");
+                    
+                    const tableHeader = document.querySelector("#partsTable thead");
+                    tableHeader.innerHTML = ` 
+                        <tr>
+                            <th>#</th>
+                            ${headers.map(header => `<th>${header}</th>`).join("")}
+                        </tr>
+                    `;
+
+                    const rowCount = Math.min(Math.floor(Math.random() * 10) + 1, partsData.length);
+                    const randomRows = [];
+                    while (randomRows.length < rowCount) {
+                        const randomIndex = Math.floor(Math.random() * partsData.length);
+                        if (!randomRows.includes(partsData[randomIndex])) {
+                            randomRows.push(partsData[randomIndex]);
+                        }
+                    }
+
+                    randomRows.forEach((row, index) => {
+                        const rowHtml = ` 
+                            <tr>
+                                <td>${index + 1}</td>
+                                ${headers.map(header => `<td>${row[header] || "Nav informācijas"}</td>`).join("")}
+                            </tr>
+                        `;
+                        tableBody.innerHTML += rowHtml;
+                    });
+                },
+                error: function (error) {
+                    console.error(`Kļūda CSV faila ${selectedCsv.file} parsēšanā:`, error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
