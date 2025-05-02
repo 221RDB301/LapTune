@@ -1,8 +1,0 @@
-LapTune
-
-Sistēma lietotājam nodrošina ērtu komponenšu meklēšanu savam portatīvajam datoram. Pirmā prototipa formāts būs tīmeklī lietojama mājas lapa. Šajā mājas lapā lietotājam vajadzēs ievadīt datora modeli / sērijas numuru / produkta numuru un sistēma automātiski sameklēs un parādīs ar šo datoru saderīgās komponentes.
-Komponentes būs sadalītas pa kategorijām, piemēram, operatīvā atmiņa (RAM), cietie diski (HDD un SSD), pamatplates, procesori u.c. Lietotājs varēs izvēlēties atbilstošo kategoriju un tad būs redzams saraksts ar atbilstošām komponentēm. Mēs piedāvāsim B2B (Business to business) sadarbību, kas ļaus konkrētās firmas detaļas parādīt pašā augšā. Mūsu mājaslapa būs ļoti līdzīga pcpartspicker.com, kura atbalsta tikai stacionāros datorus, bet mūsu mājaslapa būs tēmēta tieši uz portatīvajiem datoriem.
-
-Mājaslapa ir izstrādes stadijā un neiekļauj visas funkcijas, kuras ir paredzētas projektējumā. Izstrādātā mājaslapa satur pamata funkcijas un sniedz labu priekšstatu par tās funkcionalitāti un domu. Mājaslapas struktūra šobrīd darbojas uz lokāli bāzētiem .csv failiem, kuri satur informāciju par klēpjdatoriem un komponentēm, taču gala produktam ir paredzēts izmantot dažādus API, kas nodrošinās piekļuvi jaunākajai informācijai un nodrošinās regulāru datu atjaunošanu. Lai šo mājaslapu padarītu visiem peejamu ir jānodrošina Hostēšanas servisi, bet tie izstrādes procesā nav nepieciešami, tāpēc mājaslapa ir lokāli izmantojama.
-
-Darbu veidoja RDBD0 3. kursa 1. grupas studenti: Kristers Jānītis(221RDB301), Markuss Boks(221CDB004).
