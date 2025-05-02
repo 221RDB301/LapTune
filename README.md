@@ -1,7 +1,7 @@
 <h1 align="center">LapTune</h1>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/bff3aeeb-d14a-43ad-bdf7-6a3abe78656f" alt="Logo">
+  <img src="https://github.com/user-attachments/assets/bff3aeeb-d14a-43ad-bdf7-6a3abe78656f" alt="Logo" width="300">
 </p>
 
 <p align="center">
